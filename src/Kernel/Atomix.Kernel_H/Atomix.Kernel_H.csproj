@@ -90,6 +90,8 @@
     <Compile Include="Gui\GuiRequest.cs" />
     <Compile Include="Gui\Programs\Explorer.cs" />
     <Compile Include="Gui\Window.cs" />
+    <Compile Include="IO\Directory.cs" />
+    <Compile Include="IO\File.cs" />
     <Compile Include="IO\FileSystem\FatFileSystem.cs" />
     <Compile Include="IO\FileSystem\FAT\FatStream.cs" />
     <Compile Include="IO\FileSystem\FAT\FileLocation.cs" />
@@ -104,8 +106,10 @@
     <Compile Include="IO\FileSystem\RFS\RamFile.cs" />
     <Compile Include="IO\FileSystem\VirtualFileSystem.cs" />
     <Compile Include="Drivers\Video\VBE.cs" />
-    <Compile Include="IO\Pipe.cs" />
+    <Compile Include="IO\FileMode.cs" />
+    <Compile Include="IO\FSObject.cs" />
     <Compile Include="IO\Stream.cs" />
+    <Compile Include="IO\VFS.cs" />
     <Compile Include="Lib\Cairo\ColorFormat.cs" />
     <Compile Include="Lib\Cairo\Font.cs" />
     <Compile Include="Lib\Cairo\Cairo.cs" />
