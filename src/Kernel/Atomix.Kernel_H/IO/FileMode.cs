@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+* PROJECT:          Atomix Development
+* LICENSE:          BSD 3-Clause (LICENSE.md)
+* PURPOSE:          VFS File Mode
+* PROGRAMMERS:      Aman Priyadarshi (aman.eureka@gmail.com)
+*/
+
+using System;
 
 namespace Atomix.Kernel_H.IO
 {

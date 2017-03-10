@@ -1,60 +1,57 @@
-﻿using System;
+﻿/*
+* PROJECT:          Atomix Development
+* LICENSE:          BSD 3-Clause (LICENSE.md)
+* PURPOSE:          Virtual File System
+* PROGRAMMERS:      Aman Priyadarshi (aman.eureka@gmail.com)
+*/
+
+using System;
 
 using Atomix.Kernel_H.Lib;
 using Atomix.Kernel_H.Core;
 
 namespace Atomix.Kernel_H.IO
 {
-    internal class VFS : Directory
+    internal static class VFS
     {
-        IList<FSObject> mEntries;
-
-        internal VFS(string aName)
-            :base(aName)
-        {
-            mEntries = new IList<FSObject>();
-        }
-
-        static VFS mRoot;
+        static VFN mRoot;
         internal static void Install()
         {
-            mRoot = new VFS(string.Empty);
+            mRoot = new VFN(string.Empty);
         }
 
-        internal override FSObject Read(string aName)
+        internal static FSObject Open(string aPath)
         {
-            IList<FSObject> list = mEntries;
-            int count = list.Count;
-            for (int index = 0; index < count; index++)
-                if (list[index].Name == aName)
-                    return list[index];
-            return null;
-        }
+            var paths = Marshal.Split(aPath, '/');
 
-        internal override bool Create(FSObject aObject)
-        {
-            mEntries.Add(aObject);
-            return true;
+            int count = paths.Length;
+            if (paths[0] != string.Empty)
+                return null;
+
+            FSObject node = mRoot;
+            for (int i = 1; i < count; i++)
+            {
+                if (node == null || !(node is Directory))
+                    return null;
+                node = ((Directory)node).Read(paths[i]);
+            }
+
+            return node;
         }
 
         internal static bool Mount(FSObject aObject, string aPath)
         {
-            var paths = Marshal.Split(aPath, '/');
+            var node = Open(aPath);
+            if (node == null || !(node is Directory))
+                return false;
+            Debug.Write("VFS Mounted: %s\n", aPath);
+            ((Directory)node).Create(aObject);
+            return true;
+        }
 
-            Directory root = mRoot;
-            int count = paths.Length;
-            for (int i = 0; i < count; i++)
-            {
-                FSObject temp = root.Read(paths[i]);
-                if (!(temp is Directory))
-                    return false;
-                root = (Directory)temp;
-            }
-
-            bool status = root.Create(aObject);
-
-            Heap.Free(paths);
-            return status;
+        internal static bool Map(string aPath, string aName)
+        {
+            return Mount(new VFN(aName), aPath);
         }
     }
 }
